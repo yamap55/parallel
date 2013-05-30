@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<project name="parallel" default="all" basedir=".">
+
+    <property name="src.main" value="src/main/java" />
+    <property name="src.test" value="src/test/java" />
+  <property name="tmp" value="target/tmp" />
+    <property name="classes" value="${tmp}/classes" />
+  <property name="reports" value="target/reports" />
+  <path id="compile.test.classpath">
+    <fileset dir="lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <target name="all">
+    <antcall target="init" />
+    <antcall target="compile" />
+    <antcall target="junit" />
+  </target>
+
+  <target name="init" description="初期処理">
+    <delete dir="${tmp}" />
+    <mkdir dir="${tmp}" />
+    <delete dir="${reports}" />
+    <mkdir dir="${reports}" />
+    <delete dir="${classes}" />
+    <mkdir dir="${classes}" />
+  </target>
+
+  <target name="compile" description="コンパイル">
+    <javac srcdir="${src.main}" destdir="${classes}" debug="on" includeantruntime="false">
+      <classpath refid="compile.test.classpath" />
+    </javac>
+        <javac srcdir="${src.test}" destdir="${classes}" debug="on" includeantruntime="false">
+            <classpath path="${classes}" />
+          <classpath refid="compile.test.classpath" />
+        </javac>
+  </target>
+  <target name="junit" description="junitの実行">
+    <junit fork="true">
+      <formatter type="xml" />
+      <classpath>
+        <path refid="compile.test.classpath" />
+        <path path="${classes}" />
+      </classpath>
+      <batchtest todir="${reports}">
+        <fileset dir="${src.test}">
+          <include name="com/yamap55/sample/parallel/*Test.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+</project>

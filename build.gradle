@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+test {
+
+  scanForTestClasses false
+  includes ['com/yamap55/sample/parallel/**Test.class']
+  maxParallelForks = 6
+}
+
+dependencies {
+    testCompile 'junit:junit:4.10'
+    compile 'junit:junit:4.10'
+}
