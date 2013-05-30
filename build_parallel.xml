@@ -14,14 +14,14 @@
         </fileset>
     </path>
 
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="lib/ant-contrib-0.6.jar" />
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="lib/ant-contrib-0.6.jar" />
 
 
-	<target name="all" description="war作成">
-		<antcall target="init" />
-		<antcall target="compile" />
-		<antcall target="execute.tests.parallel" />
-	</target>
+  <target name="all">
+    <antcall target="init" />
+    <antcall target="compile" />
+    <antcall target="execute.tests.parallel" />
+  </target>
 
     <target name="init" description="初期処理。">
         <delete dir="${tmp}" />
@@ -42,29 +42,29 @@
         </javac>
     </target>
 
-	<target name="execute.test">
-		<junit fork="true" printsummary="true">
+  <target name="execute.test">
+    <junit fork="true" printsummary="true">
 
-			<classpath>
-				<path refid="compile.test.classpath" />
-				<path path="${classes}" />
-			</classpath>
+      <classpath>
+        <path refid="compile.test.classpath" />
+        <path path="${classes}" />
+      </classpath>
 
-			<formatter type="xml" />
+      <formatter type="xml" />
 
-			<batchtest todir="${reports}">
-				<filelist dir="${src.test}" files="${test.source.absolute}" />
-			</batchtest>
-		</junit>
-	</target>
+      <batchtest todir="${reports}">
+        <filelist dir="${src.test}" files="${test.source.absolute}" />
+      </batchtest>
+    </junit>
+  </target>
 
-	<target name="execute.tests.parallel">
-		<foreach target="execute.test" maxThreads="5" inheritall="true" inheritrefs="true" parallel="true" param="test.source.absolute">
-			<path>
-				<fileset dir="${src.test}">
-					<include name="com/yamap55/sample/parallel/*Test.java" />
-				</fileset>
-			</path>
-		</foreach>
-	</target>
+  <target name="execute.tests.parallel">
+    <foreach target="execute.test" maxThreads="5" inheritall="true" inheritrefs="true" parallel="true" param="test.source.absolute">
+      <path>
+        <fileset dir="${src.test}">
+          <include name="com/yamap55/sample/parallel/*Test.java" />
+        </fileset>
+      </path>
+    </foreach>
+  </target>
 </project>
